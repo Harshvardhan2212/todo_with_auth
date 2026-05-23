@@ -16,4 +16,7 @@ public interface TodoService {
 
   List<TodoDto> get();
 
+  TodoDto complete(Long id);
+
+  TodoDto inComplete(Long id);
 }

@@ -46,4 +46,16 @@ public class TodoController {
     TodoDto todo = todoService.update(id, todoDto);
     return ResponseEntity.ok(todo);
   }
+
+  @PutMapping("/{id}/complete")
+  public ResponseEntity<TodoDto> complete(@PathVariable Long id) {
+    TodoDto todo = todoService.complete(id);
+    return ResponseEntity.ok(todo);
+  }
+
+  @PutMapping("/{id}/incomplete")
+  public ResponseEntity<TodoDto> inComplete(@PathVariable Long id) {
+    TodoDto todo = todoService.inComplete(id);
+    return ResponseEntity.ok(todo);
+  }
 }
