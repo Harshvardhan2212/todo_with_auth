@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -47,13 +48,13 @@ public class TodoController {
     return ResponseEntity.ok(todo);
   }
 
-  @PutMapping("/{id}/complete")
+  @PatchMapping("/{id}/complete")
   public ResponseEntity<TodoDto> complete(@PathVariable Long id) {
     TodoDto todo = todoService.complete(id);
     return ResponseEntity.ok(todo);
   }
 
-  @PutMapping("/{id}/incomplete")
+  @PatchMapping("/{id}/incomplete")
   public ResponseEntity<TodoDto> inComplete(@PathVariable Long id) {
     TodoDto todo = todoService.inComplete(id);
     return ResponseEntity.ok(todo);

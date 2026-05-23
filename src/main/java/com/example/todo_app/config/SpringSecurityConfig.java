@@ -18,8 +18,14 @@ public class SpringSecurityConfig {
   SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
     http.csrf(csrf -> csrf.disable())
-        .authorizeHttpRequests((authorize) -> authorize
-            .requestMatchers(HttpMethod.POST, "/**").hasRole("ADMIN"))
+        .authorizeHttpRequests((authorize) -> {
+          authorize.requestMatchers(HttpMethod.POST, "/**").hasRole("ADMIN");
+          authorize.requestMatchers(HttpMethod.PUT, "/**").hasRole("ADMIN");
+          authorize.requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN");
+          authorize.requestMatchers(HttpMethod.GET, "/**").permitAll();
+          authorize.requestMatchers(HttpMethod.PATCH, "/**").hasAnyRole("ADMIN", "USER");
+          authorize.anyRequest().authenticated();
+        })
         .httpBasic(Customizer.withDefaults());
     return http.build();
   }
