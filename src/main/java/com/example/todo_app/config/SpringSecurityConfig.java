@@ -3,15 +3,18 @@ package com.example.todo_app.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import lombok.AllArgsConstructor;
+
 @Configuration
+@EnableMethodSecurity
+@AllArgsConstructor
 public class SpringSecurityConfig {
 
   @Bean
@@ -19,11 +22,12 @@ public class SpringSecurityConfig {
 
     http.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests((authorize) -> {
-          authorize.requestMatchers(HttpMethod.POST, "/**").hasRole("ADMIN");
-          authorize.requestMatchers(HttpMethod.PUT, "/**").hasRole("ADMIN");
-          authorize.requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN");
+          // authorize.requestMatchers(HttpMethod.POST, "/**").hasRole("ADMIN");
+          // authorize.requestMatchers(HttpMethod.PUT, "/**").hasRole("ADMIN");
+          // authorize.requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN");
+          // authorize.requestMatchers(HttpMethod.PATCH, "/**").hasAnyRole("ADMIN",
+          // "USER");
           authorize.requestMatchers(HttpMethod.GET, "/**").permitAll();
-          authorize.requestMatchers(HttpMethod.PATCH, "/**").hasAnyRole("ADMIN", "USER");
           authorize.anyRequest().authenticated();
         })
         .httpBasic(Customizer.withDefaults());
@@ -31,16 +35,21 @@ public class SpringSecurityConfig {
   }
 
   @Bean
-  public UserDetailsService userDetailsService() {
-    UserDetails harsh = User.builder()
-        .username("harsh")
-        .password("password").build();
-
-    UserDetails admin = User.builder()
-        .username("admin")
-        .password("password")
-        .roles("ADMIN").build();
-    return new InMemoryUserDetailsManager(harsh, admin);
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) {
+    return authenticationConfiguration.getAuthenticationManager();
   }
+
+  // @Bean
+  // public UserDetailsService userDetailsService() {
+  // UserDetails harsh = User.builder()
+  // .username("harsh")
+  // .password("password").build();
+  //
+  // UserDetails admin = User.builder()
+  // .username("admin")
+  // .password("password")
+  // .roles("ADMIN").build();
+  // return new InMemoryUserDetailsManager(harsh, admin);
+  // }
 
 }
